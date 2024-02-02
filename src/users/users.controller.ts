@@ -1,16 +1,45 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  Put,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Users } from './users.model';
+import { UsersDto } from './dto/users.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post('/join')
-  join(
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ): Users {
-    return this.usersService.join(email, password);
+  @HttpCode(201)
+  @UsePipes(ValidationPipe)
+  join(@Body() createUsersDto: UsersDto): string {
+    return this.usersService.join(createUsersDto);
+  }
+
+  @Post('/login')
+  @HttpCode(200)
+  @UsePipes(ValidationPipe)
+  login(@Body() createUsersDto: UsersDto): Users {
+    return this.usersService.login(createUsersDto);
+  }
+
+  @Post('/reset')
+  @HttpCode(200)
+  @UsePipes(ValidationPipe)
+  resetPasswordRequest(@Body() createUsersDto: UsersDto): Users {
+    return this.usersService.resetPasswordRequest(createUsersDto);
+  }
+
+  @Put('/reset')
+  @HttpCode(200)
+  @UsePipes(ValidationPipe)
+  resetPassword(@Body() createUsersDto: UsersDto): Users {
+    return this.usersService.resetPassword(createUsersDto);
   }
 }

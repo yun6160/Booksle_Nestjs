@@ -7,6 +7,13 @@ import { LikesModule } from './likes/likes.module';
 import { OrdersModule } from './orders/orders.module';
 
 @Module({
-  imports: [UsersModule, BooksModule, CartsModule, CategoryModule, LikesModule, OrdersModule],
+  imports: [
+    UsersModule,
+    BooksModule,
+    CartsModule,
+    CategoryModule,
+    LikesModule,
+    OrdersModule,
+  ],
 })
 export class AppModule {}
