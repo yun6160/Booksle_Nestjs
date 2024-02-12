@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Likes } from './likes.model';
 
 @Injectable()
@@ -14,8 +14,17 @@ export class LikesService {
     return this.likes;
   }
 
-  removeLikes(bookId): void {
-    this.likes = this.likes.filter((v) => v.liked_book_id !== bookId);
-    console.log(this.likes);
+  removeLikes(likeDto): void {
+    const found = this.likes.filter(
+      (v) => v.liked_book_id == likeDto.book_id && v.user_id == likeDto.user_id,
+    );
+    if (!found.length) {
+      throw new NotFoundException('좋아요 기록을 찾을 수 없습니다');
+    } else {
+      this.likes = this.likes.filter(
+        (v) =>
+          v.liked_book_id == likeDto.book_id && v.user_id == likeDto.user_id,
+      );
+    }
   }
 }
