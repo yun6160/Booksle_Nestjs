@@ -5,9 +5,12 @@ import { CartsModule } from './carts/carts.module';
 import { CategoryModule } from './category/category.module';
 import { LikesModule } from './likes/likes.module';
 import { OrdersModule } from './orders/orders.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeORMConfig } from './configs/typeorm.config';
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot(typeORMConfig),
     UsersModule,
     BooksModule,
     CartsModule,
