@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { v1 as uuid } from 'uuid';
+import { Injectable } from '@nestjs/common';
 import { UsersDto } from './dto/users.dto';
 import { UsersRepository } from './users.repository';
 import { Users } from 'src/entities/users.entity';
@@ -12,45 +7,19 @@ import { Users } from 'src/entities/users.entity';
 export class UsersService {
   constructor(private usersRepository: UsersRepository) {}
 
-  async join(createUsersDto: UsersDto): Promise<string> {
-    const { email, password } = createUsersDto;
-
-    const user = this.usersRepository.create({ email, password, salt: uuid() });
-
-    try {
-      await this.usersRepository.insert(user);
-      return '가입이 완료되었습니다';
-    } catch (error) {
-      throw new BadRequestException('회원가입에 실패하였습니다.');
-    }
+  join(createUsersDto: UsersDto): Promise<string> {
+    return this.usersRepository.join(createUsersDto);
   }
 
-  async login(createUsersDto: UsersDto): Promise<string> {
-    const { email, password } = createUsersDto;
-    const found = await this.usersRepository.findOne({
-      where: { email, password },
-    });
-    if (!found) {
-      throw new NotFoundException('이메일 또는 비밀번호가 틀렸습니다');
-    }
-
-    return `${email}님이 로그인했습니다`;
+  login(createUsersDto: UsersDto): Promise<string> {
+    return this.usersRepository.login(createUsersDto);
   }
 
-  // resetPasswordRequest(createUsersDto: UsersDto): Users {
-  //   const { email } = createUsersDto;
-  //   return this.users.find((v) => v.email === email);
-  // }
+  resetPasswordRequest(createUsersDto: UsersDto): Promise<Users> {
+    return this.usersRepository.resetPasswordRequest(createUsersDto);
+  }
 
-  // resetPassword(createUsersDto: UsersDto): Users {
-  //   const { email, password } = createUsersDto;
-  //   let user: Users;
-  //   this.users.forEach((v) => {
-  //     if (v.email === email) {
-  //       v.password = password;
-  //       user = v;
-  //     }
-  //   });
-  //   return user;
-  // }
+  resetPassword(createUsersDto: UsersDto): Promise<string> {
+    return this.usersRepository.resetPassword(createUsersDto);
+  }
 }

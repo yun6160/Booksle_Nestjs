@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Category } from './category.model';
+import { CategoryRepository } from './category.repository';
+import { Category } from 'src/entities/category.entity';
 
 @Injectable()
 export class CategoryService {
-  private categorys: Category[] = [];
+  constructor(private categoryRepository: CategoryRepository) {}
 
-  getAllCategory(): Category[] {
-    return this.categorys;
+  getAllCategory(): Promise<Category[]> {
+    return this.categoryRepository.getAllCategory();
   }
 }
